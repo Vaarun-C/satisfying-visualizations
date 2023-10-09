@@ -20,4 +20,5 @@ To get started, follow these steps:
 
 ## Author
 Varun C
+
 Have fun watching the visualizations! :)
