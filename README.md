@@ -18,7 +18,7 @@ To get started, follow these steps:
 
 - Credits to [project_jdm](https://www.youtube.com/@project_jdm) for ideas related to the box. Enjoy their satisfying video: [Satisfying Box Video](https://www.youtube.com/shorts/JA-7nvt-JJs).
 
-## Author
-Varun C
+## Contributor Name
+[Varun C](https://github.com/Vaarun-C)
 
 Have fun watching the visualizations! :)
