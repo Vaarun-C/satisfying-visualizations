@@ -41,11 +41,15 @@ SLIDER_HEIGHT = 10
 SLIDER_HANDLE_RADIUS = 15
 SLIDER_COLOR = (0, 0, 0)
 SLIDER_HANDLE_COLOR = (255, 0, 0)
-slider_value = 0.5  
+slider_value = 0.5  # Initial volume value
+
+# Flag to indicate slider dragging
 slider_dragging = False
 
-box_positions = []
+# List to store box positions and colors
+box_data = []
 
+# Function to update volume based on the slider position
 def update_volume():
     volume = slider_value
     mixer.music.set_volume(volume)
@@ -66,14 +70,12 @@ def draw_window():
     inner_box = pygame.Rect(x_pos, y_pos, 0.1 * HEIGHT, 0.1 * HEIGHT)
     COLOUR = new_colour(COLOUR)
 
-    # Clear the screen
     WIN.fill(GREY)
-
-    # Draw the slider
     pygame.draw.rect(WIN, SLIDER_COLOR, (SLIDER_X, SLIDER_Y, SLIDER_WIDTH, SLIDER_HEIGHT))
 
-    if slider_value > 0 and slider_value < 1:
-        pygame.draw.circle(WIN, SLIDER_HANDLE_COLOR, (SLIDER_X + int(slider_value * SLIDER_WIDTH), SLIDER_Y + SLIDER_HEIGHT // 2), SLIDER_HANDLE_RADIUS)
+    slider_handle_x = SLIDER_X + int(slider_value * SLIDER_WIDTH)
+    slider_handle_x = max(SLIDER_X, min(SLIDER_X + SLIDER_WIDTH, slider_handle_x))
+    pygame.draw.circle(WIN, SLIDER_HANDLE_COLOR, (slider_handle_x, SLIDER_Y + SLIDER_HEIGHT // 2), SLIDER_HANDLE_RADIUS)
 
     pygame.draw.rect(WIN, WHITE, outer_box, width=WIDTH_OF_LINE)
     pygame.draw.rect(WIN, COLOUR, inner_box)
@@ -95,15 +97,16 @@ def draw_window():
     x_pos += inc_value * inc_or_dec_left_right
     y_pos += inc_value * inc_or_dec_up_down
 
-    for box_rect in box_positions:
-        pygame.draw.rect(WIN, COLOUR, box_rect)
-        pygame.draw.rect(WIN, DARKGREY, box_rect, width=2)  # Border
+    # Draw the trailing boxes with random colors
+    for pos, color in box_data:
+        pygame.draw.rect(WIN, color, pos)
+        pygame.draw.rect(WIN, DARKGREY, pos, width=1)  # Border
 
     pygame.display.update()
     pygame.time.delay(60)
 
 def main():
-    global run, slider_value, slider_dragging, box_positions
+    global run, slider_value, slider_dragging, box_data
 
     WIN.fill(GREY)
     update_volume()
@@ -130,9 +133,9 @@ def main():
                     slider_value = max(0, min(1, (mouse_x - SLIDER_X) / SLIDER_WIDTH))
                     update_volume()
 
-        box_positions.append(pygame.Rect(x_pos, y_pos, 0.1 * HEIGHT, 0.1 * HEIGHT))
-
-        
+        # Store the current slider position as a rectangle with a random color and append it to the list
+        box_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        box_data.append((pygame.Rect(x_pos, y_pos, 0.1 * HEIGHT, 0.1 * HEIGHT), box_color))
 
         draw_window()
 
