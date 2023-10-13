@@ -1,5 +1,7 @@
 import pygame
 import random
+import math
+import numpy as np
 
 # Initialize Pygame
 pygame.init()
@@ -16,43 +18,62 @@ run = True
 FPS = 60
 GREY = (128, 128, 128)
 DARKGREY = (65, 65, 65)
-GRADIENT_START = (30,30,30)
+GRADIENT_START = (30, 30, 30)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 COLOUR = GRADIENT_START
 WIDTH_OF_LINE = 5
 inc_or_dec_up_down = -1
 inc_or_dec_left_right = 1
-inc_value = HEIGHT/100
-x_pos = 0.2*WIDTH+2*WIDTH_OF_LINE
+inc_value = HEIGHT / 100
+x_pos = 0.2 * WIDTH + 2 * WIDTH_OF_LINE
 y_pos = 0.8 * HEIGHT
 counter = 10
 
-color_inc_or_dec = [1,1,1]
+color_inc_or_dec = [1, 1, 1]
+
+SAMPLING_RATE = 44100
+DURATION = 0.2  # Adjust duration for a more pleasant sound
+
+# Generate a sound with a given frequency and duration
+def generate_note(frequency, duration):
+    num_samples = int(SAMPLING_RATE * duration)
+    sound_data = np.zeros(num_samples, dtype=np.int16)
+
+    for i in range(num_samples):
+        t = float(i) / SAMPLING_RATE
+        value = int(32767.0 * 0.5 * math.sin(2.0 * math.pi * frequency * t))
+        sound_data[i] = value
+
+    sound = pygame.mixer.Sound(buffer=sound_data)
+    return sound
 
 def new_colour(colour):
-
     global color_inc_or_dec
 
     colour = list(colour)
     index = random.randint(0, 2)
-    if(colour[index] >= 230) or (colour[index] <= 0):
+    if (colour[index] >= 230) or (colour[index] <= 0):
         color_inc_or_dec[index] *= -1
-    colour[index] = (colour[index] + counter*color_inc_or_dec[index])
+    colour[index] = (colour[index] + counter * color_inc_or_dec[index])
     return tuple(colour)
 
 def draw_window():
-
     global x_pos, y_pos, inc_or_dec_left_right, inc_or_dec_up_down, COLOUR
+    outer_box = pygame.Rect(0.2 * WIDTH + WIDTH_OF_LINE, 0.1 * HEIGHT + WIDTH_OF_LINE, 0.6 * WIDTH, 0.8 * HEIGHT)
+    inner_box = pygame.Rect(x_pos, y_pos, 0.1 * HEIGHT, 0.1 * HEIGHT)
+    new_color = new_colour(COLOUR)
 
-    outer_box = pygame.Rect(0.2*WIDTH+WIDTH_OF_LINE, 0.1*HEIGHT+WIDTH_OF_LINE, 0.6*WIDTH, 0.8*HEIGHT)
-    inner_box = pygame.Rect(x_pos, y_pos, 0.1 * HEIGHT, 0.1*HEIGHT)
-    COLOUR = new_colour(COLOUR)
-    # print(COLOUR)
+    if new_color != COLOUR:
+        freq = random.randint(200, 600)  # Adjust the frequency range for a pleasant sound
+        note = generate_note(freq, DURATION)
+        note.play()
+
+    COLOUR = new_color
 
     pygame.draw.rect(WIN, WHITE, outer_box, width=WIDTH_OF_LINE)
     pygame.draw.rect(WIN, COLOUR, inner_box)
-    pygame.draw.rect(WIN, DARKGREY, inner_box, width=WIDTH_OF_LINE//2)
+    pygame.draw.rect(WIN, DARKGREY, inner_box, width=WIDTH_OF_LINE // 2)
 
     if outer_box.colliderect(inner_box):
         if outer_box.top >= inner_box.top:
@@ -71,19 +92,17 @@ def draw_window():
             # collision_direction: right
             inc_or_dec_left_right *= -1
 
-
-    x_pos += inc_value*inc_or_dec_left_right
-    y_pos += inc_value*inc_or_dec_up_down
+    x_pos += inc_value * inc_or_dec_left_right
+    y_pos += inc_value * inc_or_dec_up_down
 
     pygame.display.update()
     pygame.time.delay(60)
-
 
 def main():
     global run
     WIN.fill(GREY)
 
-    # Main game loop    
+    # Main game loop
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
