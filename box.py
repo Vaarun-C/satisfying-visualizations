@@ -43,6 +43,9 @@ SLIDER_COLOR = (0, 0, 0)
 SLIDER_HANDLE_COLOR = (255, 0, 0)
 slider_value = 0.5  # Initial volume value
 
+# Flag to indicate slider dragging
+slider_dragging = False
+
 # Function to update volume based on the slider position
 def update_volume():
     volume = slider_value
@@ -97,16 +100,17 @@ def draw_window():
     pygame.time.delay(60)
 
 def main():
-    global run, slider_value
+    global run, slider_value, slider_dragging
 
     WIN.fill(GREY)
-    update_volume()  # Update the volume initially
+    update_volume() 
 
-    # Main game loop
+    
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+                continue
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     mouse_x, mouse_y = event.pos
@@ -114,14 +118,21 @@ def main():
                         SLIDER_X <= mouse_x <= SLIDER_X + SLIDER_WIDTH
                         and SLIDER_Y <= mouse_y <= SLIDER_Y + SLIDER_HEIGHT
                     ):
-                        # Clicked on the slider, start dragging
-                        slider_value = (mouse_x - SLIDER_X) / SLIDER_WIDTH
-                        update_volume()
+                        
+                        slider_dragging = True
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:
+                 
+                    slider_dragging = False
+            elif event.type == pygame.MOUSEMOTION:
+                if slider_dragging:
+                   
+                    mouse_x, _ = event.pos
+                    slider_value = max(0, min(1, (mouse_x - SLIDER_X) / SLIDER_WIDTH))
+                    update_volume()
 
         draw_window()
 
-    pygame.quit()
-
+    pygame.quit
 if __name__ == "__main__":
     main()
-# change
