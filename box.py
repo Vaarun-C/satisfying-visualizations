@@ -9,6 +9,9 @@ pygame.init()
 pygame.mixer.init()
 mixer.music.load (r"gg.mp3")
 mixer.music.play(-1)
+collision_sound = mixer.Sound("durm.mp3")
+if outer_box.colliderect(inner_box):
+    collision_sound.play()
 
 
 WIDTH, HEIGHT = 900, 800
