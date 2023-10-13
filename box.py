@@ -1,11 +1,17 @@
 import pygame
 import random
+from pygame import mixer
+
 
 # Initialize Pygame
 pygame.init()
 
 # Initialize the Pygame mixer
 pygame.mixer.init()
+pygame.mixer.init()
+mixer.music.load("gg.mp3")
+mixer.music.play(-1)
+collision_sound = mixer.Sound("durm.mp3")
 
 WIDTH, HEIGHT = 900, 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -23,9 +29,11 @@ COLOUR = GRADIENT_START
 WIDTH_OF_LINE = 5
 inc_or_dec_up_down = -1
 inc_or_dec_left_right = 1
+x_pos = random.randint(100, 500)
+y_pos = random.randint(200, 400)
 inc_value = HEIGHT/100
-x_pos = random.randint(100,840)
-y_pos = random.randint(100,730)
+#x_pos = 0.2*WIDTH+2*WIDTH_OF_LINE
+#y_pos = 0.8 * HEIGHT
 counter = 10
 
 color_inc_or_dec = [1,1,1]
@@ -54,20 +62,24 @@ def draw_window():
     pygame.draw.rect(WIN, COLOUR, inner_box)
     pygame.draw.rect(WIN, DARKGREY, inner_box, width=WIDTH_OF_LINE//2)
 
-    
-    if  outer_box.top+5>=inner_box.top:
+    if outer_box.colliderect(inner_box):
+        if outer_box.top >= inner_box.top:
+            collision_sound.play()
             # collision_direction: top
             inc_or_dec_up_down *= -1
 
-    if outer_box.bottom-5 <= inner_box.bottom:
+        if outer_box.bottom <= inner_box.bottom:
+            collision_sound.play()
             # collision_direction: bottom
             inc_or_dec_up_down *= -1
-    
-    if outer_box.right-5 <= inner_box.right:
+
+        if outer_box.right <= inner_box.right:
+            collision_sound.play()
             # collision_direction: left
             inc_or_dec_left_right *= -1
 
-    if outer_box.left+5 >= inner_box.left:
+        if outer_box.left >= inner_box.left:
+            collision_sound.play()
             # collision_direction: right
             inc_or_dec_left_right *= -1
 
