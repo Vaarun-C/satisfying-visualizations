@@ -54,20 +54,20 @@ def draw_window():
     pygame.draw.rect(WIN, COLOUR, inner_box)
     pygame.draw.rect(WIN, DARKGREY, inner_box, width=WIDTH_OF_LINE//2)
 
-    if outer_box.colliderect(inner_box):
-        if outer_box.top+10 >= inner_box.top:
+    
+    if  outer_box.top+5>=inner_box.top:
             # collision_direction: top
             inc_or_dec_up_down *= -1
 
-        if outer_box.bottom-10 <= inner_box.bottom:
+    if outer_box.bottom-5 <= inner_box.bottom:
             # collision_direction: bottom
             inc_or_dec_up_down *= -1
-
-        if outer_box.right-10 <= inner_box.right:
+    
+    if outer_box.right-5 <= inner_box.right:
             # collision_direction: left
             inc_or_dec_left_right *= -1
 
-        if outer_box.left+10 >= inner_box.left:
+    if outer_box.left+5 >= inner_box.left:
             # collision_direction: right
             inc_or_dec_left_right *= -1
 
