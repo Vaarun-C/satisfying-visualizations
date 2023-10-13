@@ -1,11 +1,15 @@
 import pygame
 import random
+from pygame import mixer
 
 # Initialize Pygame
 pygame.init()
 
 # Initialize the Pygame mixer
 pygame.mixer.init()
+mixer.music.load (r"gg.mp3")
+mixer.music.play(-1)
+
 
 WIDTH, HEIGHT = 900, 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
