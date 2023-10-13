@@ -1,4 +1,4 @@
-iimport pygame
+import pygame
 import random
 from pygame import mixer
 
@@ -29,8 +29,8 @@ COLOUR = GRADIENT_START
 WIDTH_OF_LINE = 5
 inc_or_dec_up_down = -1
 inc_or_dec_left_right = 1
-x_pos = random.randint(100, 840)
-y_pos = random.randint(100, 730)
+x_pos = random.randint(100, 500)
+y_pos = random.randint(200, 400)
 inc_value = HEIGHT/100
 #x_pos = 0.2*WIDTH+2*WIDTH_OF_LINE
 #y_pos = 0.8 * HEIGHT
