@@ -9,9 +9,7 @@ pygame.init()
 pygame.mixer.init()
 mixer.music.load (r"gg.mp3")
 mixer.music.play(-1)
-collision_sound = mixer.Sound(r"durm.mp3")
-if outer_box.colliderect(inner_box):
-    collision_sound.play()
+
 
 
 WIDTH, HEIGHT = 900, 800
@@ -77,6 +75,11 @@ def draw_window():
         if outer_box.left >= inner_box.left:
             # collision_direction: right
             inc_or_dec_left_right *= -1
+
+
+collision_sound = mixer.Sound(r"durm.mp3")
+if outer_box.colliderect(inner_box):
+    collision_sound.play()
 
 
     x_pos += inc_value*inc_or_dec_left_right
