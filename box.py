@@ -41,12 +41,11 @@ SLIDER_HEIGHT = 10
 SLIDER_HANDLE_RADIUS = 15
 SLIDER_COLOR = (0, 0, 0)
 SLIDER_HANDLE_COLOR = (255, 0, 0)
-slider_value = 0.5  # Initial volume value
-
-# Flag to indicate slider dragging
+slider_value = 0.5  
 slider_dragging = False
 
-# Function to update volume based on the slider position
+box_positions = []
+
 def update_volume():
     volume = slider_value
     mixer.music.set_volume(volume)
@@ -72,7 +71,7 @@ def draw_window():
 
     # Draw the slider
     pygame.draw.rect(WIN, SLIDER_COLOR, (SLIDER_X, SLIDER_Y, SLIDER_WIDTH, SLIDER_HEIGHT))
-    
+
     if slider_value > 0 and slider_value < 1:
         pygame.draw.circle(WIN, SLIDER_HANDLE_COLOR, (SLIDER_X + int(slider_value * SLIDER_WIDTH), SLIDER_Y + SLIDER_HEIGHT // 2), SLIDER_HANDLE_RADIUS)
 
@@ -96,16 +95,19 @@ def draw_window():
     x_pos += inc_value * inc_or_dec_left_right
     y_pos += inc_value * inc_or_dec_up_down
 
+    for box_rect in box_positions:
+        pygame.draw.rect(WIN, COLOUR, box_rect)
+        pygame.draw.rect(WIN, DARKGREY, box_rect, width=2)  # Border
+
     pygame.display.update()
     pygame.time.delay(60)
 
 def main():
-    global run, slider_value, slider_dragging
+    global run, slider_value, slider_dragging, box_positions
 
     WIN.fill(GREY)
-    update_volume() 
+    update_volume()
 
-    
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -118,21 +120,21 @@ def main():
                         SLIDER_X <= mouse_x <= SLIDER_X + SLIDER_WIDTH
                         and SLIDER_Y <= mouse_y <= SLIDER_Y + SLIDER_HEIGHT
                     ):
-                        
                         slider_dragging = True
             elif event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
-                 
                     slider_dragging = False
             elif event.type == pygame.MOUSEMOTION:
                 if slider_dragging:
-                   
                     mouse_x, _ = event.pos
                     slider_value = max(0, min(1, (mouse_x - SLIDER_X) / SLIDER_WIDTH))
                     update_volume()
 
+        box_positions.append(pygame.Rect(x_pos, y_pos, 0.1 * HEIGHT, 0.1 * HEIGHT))
+
+        
+
         draw_window()
 
-    pygame.quit
 if __name__ == "__main__":
     main()
