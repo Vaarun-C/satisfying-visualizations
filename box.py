@@ -64,11 +64,14 @@ def draw_window():
     inner_box = pygame.Rect(x_pos, y_pos, 0.1 * HEIGHT, 0.1 * HEIGHT)
     COLOUR = new_colour(COLOUR)
 
+    # Clear the screen
+    WIN.fill(GREY)
+
     # Draw the slider
     pygame.draw.rect(WIN, SLIDER_COLOR, (SLIDER_X, SLIDER_Y, SLIDER_WIDTH, SLIDER_HEIGHT))
-    slider_handle_x = SLIDER_X + int(slider_value * SLIDER_WIDTH)
+    
     if slider_value > 0 and slider_value < 1:
-        pygame.draw.circle(WIN, SLIDER_HANDLE_COLOR, (slider_handle_x, SLIDER_Y + SLIDER_HEIGHT // 2), SLIDER_HANDLE_RADIUS)
+        pygame.draw.circle(WIN, SLIDER_HANDLE_COLOR, (SLIDER_X + int(slider_value * SLIDER_WIDTH), SLIDER_Y + SLIDER_HEIGHT // 2), SLIDER_HANDLE_RADIUS)
 
     pygame.draw.rect(WIN, WHITE, outer_box, width=WIDTH_OF_LINE)
     pygame.draw.rect(WIN, COLOUR, inner_box)
