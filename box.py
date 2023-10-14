@@ -124,7 +124,7 @@ def main():
                     adjust_volume(True)  # Increase volume
                 elif event.key == pygame.K_DOWN:
                     adjust_volume(False)  # Decrease volume
-
+                    
         draw_window()
 
     pygame.quit()
