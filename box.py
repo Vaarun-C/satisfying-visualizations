@@ -10,8 +10,14 @@ pygame.init()
 pygame.mixer.init()
 pygame.mixer.init()
 mixer.music.load("gg.mp3")
+
+volume = 0.5
+mixer.music.set_volume(volume)
+
+
 mixer.music.play(-1)
 collision_sound = mixer.Sound("durm.mp3")
+collision_sound.set_volume(volume)
 
 WIDTH, HEIGHT = 900, 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -48,6 +54,19 @@ def new_colour(colour):
         color_inc_or_dec[index] *= -1
     colour[index] = (colour[index] + counter*color_inc_or_dec[index])
     return tuple(colour)
+
+
+#function to adjust volume with up and down keys
+def adjust_volume(increase):
+    global volume
+    if increase:
+        if volume < 1.0:
+            volume += 0.1
+    else:
+        if volume > 0.0:
+            volume -= 0.1
+    mixer.music.set_volume(volume)
+    collision_sound.set_volume(volume)
 
 def draw_window():
 
@@ -100,7 +119,12 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-                continue
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    adjust_volume(True)  # Increase volume
+                elif event.key == pygame.K_DOWN:
+                    adjust_volume(False)  # Decrease volume
+
         draw_window()
 
     pygame.quit()
